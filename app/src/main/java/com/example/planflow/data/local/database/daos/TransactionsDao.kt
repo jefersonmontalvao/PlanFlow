@@ -6,20 +6,21 @@ import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
 import com.example.planflow.data.local.database.entities.TransactionEntity
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface TransactionsDao {
     @Insert
-    fun insert(transaction: TransactionEntity)
+    suspend fun insert(transaction: TransactionEntity)
 
     @Delete
-    fun delete(transaction: TransactionEntity)
+    suspend fun delete(transaction: TransactionEntity)
 
     @Update
-    fun update(transaction: TransactionEntity)
+    suspend fun update(transaction: TransactionEntity)
 
     @Query("SELECT * FROM transactions")
-    suspend fun getAll(): List<TransactionEntity>
+fun getAll(): Flow<List<TransactionEntity>>
 
     @Query("SELECT * FROM transactions WHERE id == :id")
     suspend fun getById(id: String): TransactionEntity?
