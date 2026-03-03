@@ -20,7 +20,7 @@ interface TransactionsDao {
     suspend fun update(transaction: TransactionEntity)
 
     @Query("SELECT * FROM transactions")
-fun getAll(): Flow<List<TransactionEntity>>
+    fun getAll(): Flow<List<TransactionEntity>>
 
     @Query("SELECT * FROM transactions WHERE id == :id")
     suspend fun getById(id: String): TransactionEntity?
