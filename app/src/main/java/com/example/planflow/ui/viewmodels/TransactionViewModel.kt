@@ -2,14 +2,16 @@ package com.example.planflow.ui.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.planflow.data.repositories.TransactionRepository
 import com.example.planflow.domain.models.Transaction
 import com.example.planflow.domain.models.TransactionType
+import com.example.planflow.domain.repositories.TransactionRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import java.math.BigDecimal
+import java.time.LocalDate
 import javax.inject.Inject
 
 @HiltViewModel
@@ -43,22 +45,21 @@ class TransactionViewModel @Inject constructor(
         initialValue = emptyList()
     )
 
-    suspend fun addTransaction(transaction: Transaction) {
+    fun addTransaction(transaction: Transaction) {
         viewModelScope.launch {
             repository.addTransaction(transaction)
         }
     }
 
-    suspend fun delTransaction(transaction: Transaction) {
+    fun delTransaction(transaction: Transaction) {
         viewModelScope.launch {
             repository.delTransaction(transaction)
         }
     }
 
-    suspend fun updateTransaction(updatedTransaction: Transaction) {
+    fun updateTransaction(updatedTransaction: Transaction) {
         viewModelScope.launch {
             repository.updateTransaction(updatedTransaction)
         }
     }
-
 }
