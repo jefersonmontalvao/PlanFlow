@@ -63,4 +63,8 @@ dependencies {
     testImplementation(libs.androidx.room.testing)
     testImplementation(libs.kotlinx.coroutines.test)
     coreLibraryDesugaring(libs.android.desugaring)
+
+    implementation(libs.navigation.compose)
+    implementation(libs.hilt.navigation.compose)
+    implementation(libs.animation)
 }
