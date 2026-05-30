@@ -75,7 +75,13 @@ fun TransactionsHistoryScreen(
                             .padding(vertical = 10.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        TransactionItem(transaction = transaction)
+                        TransactionItem(
+                            transaction = transaction,
+                            onTransactionClick = {
+
+                            }
+
+                        )
                     }
                 }
             }
