@@ -13,7 +13,15 @@ data class Transaction(
     val date: LocalDate,
 ) {
     init {
-        require(amount > BigDecimal.ZERO)
+        require(name.length <= MAX_NAME_LENGTH) {
+            "Name cannot exceed $MAX_NAME_LENGTH characters"
+        }
+        require(amount > BigDecimal.ZERO) {
+            "Amount must to be greater than zero"
+        }
+        require(description.length <= MAX_DESCRIPTION_LENGTH) {
+            "Description cannot exceed $MAX_DESCRIPTION_LENGTH characters"
+        }
     }
 
     val signedAmount: BigDecimal
@@ -22,4 +30,9 @@ data class Transaction(
         } else {
             amount
         }
+
+    companion object {
+        const val MAX_NAME_LENGTH = 45
+        const val MAX_DESCRIPTION_LENGTH = 150
+    }
 }
