@@ -68,7 +68,11 @@ fun AddTransactionScreen(
 
     Scaffold(
         topBar = {
-            TopBar(stringResource(R.string.screen_title_add_transaction))
+            TopBar(
+                text = stringResource(R.string.screen_title_add_transaction),
+                showBackIcon = true,
+                onBackClick = { navigator.goBack() }
+            )
         },
         bottomBar = {
             BottomBar(
@@ -168,7 +172,7 @@ fun AddTransactionScreen(
                         transactionDetails = descriptionInput
                     }
                 },
-                label = { Text(stringResource(R.string.label_transaction_description)) },
+                label = { Text(stringResource(R.string.label_transaction_description_optional)) },
                 shape = RoundedCornerShape(5.dp),
                 modifier = Modifier.fillMaxWidth(),
                 supportingText = {
