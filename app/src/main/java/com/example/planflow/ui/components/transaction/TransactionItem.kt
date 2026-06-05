@@ -1,5 +1,6 @@
 package com.example.planflow.ui.components.transaction
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -21,7 +22,11 @@ import java.time.format.FormatStyle
 import java.util.Locale
 
 @Composable
-fun TransactionItem(transaction: Transaction, modifier: Modifier = Modifier) {
+fun TransactionItem(
+    transaction: Transaction,
+    onTransactionClick: (transaction: Transaction) -> Unit,
+    modifier: Modifier = Modifier
+) {
     val formattedDate = formatTransactionDate(
         todayDate = LocalDate.now(),
         transactionDate = transaction.date,
@@ -32,7 +37,9 @@ fun TransactionItem(transaction: Transaction, modifier: Modifier = Modifier) {
     val formattedCurrency = formatCurrency(transaction.signedAmount)
 
     Column(
-        modifier = modifier.fillMaxWidth()
+        modifier = modifier
+            .fillMaxWidth()
+            .clickable { onTransactionClick(transaction) }
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,

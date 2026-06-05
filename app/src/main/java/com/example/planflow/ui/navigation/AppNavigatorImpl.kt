@@ -1,6 +1,7 @@
 package com.example.planflow.ui.navigation
 
 import androidx.navigation.NavHostController
+import com.example.planflow.domain.models.Transaction
 
 class AppNavigatorImpl(
     private val navController: NavHostController
@@ -19,6 +20,10 @@ class AppNavigatorImpl(
 
     override fun goToAddTransaction() {
         navController.navigate(Screen.AddTransaction.route)
+    }
+
+    override fun goToTransactionDetails(transaction: Transaction) {
+        navController.navigate(Screen.Details.createRoute(transaction.id))
     }
 
     override fun goBack() {

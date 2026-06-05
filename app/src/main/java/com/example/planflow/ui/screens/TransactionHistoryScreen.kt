@@ -19,15 +19,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.planflow.R
-import com.example.planflow.domain.models.Transaction
-import com.example.planflow.domain.models.TransactionType
 import com.example.planflow.ui.components.bottombar.BottomBar
 import com.example.planflow.ui.components.topbar.TopBar
 import com.example.planflow.ui.components.transaction.TransactionItem
 import com.example.planflow.ui.navigation.AppNavigator
 import com.example.planflow.ui.viewmodels.TransactionViewModel
-import java.math.BigDecimal
-import java.time.LocalDate
 
 @Composable
 fun TransactionsHistoryScreen(
@@ -77,10 +73,9 @@ fun TransactionsHistoryScreen(
                     ) {
                         TransactionItem(
                             transaction = transaction,
-                            onTransactionClick = {
-
+                            onTransactionClick = { transaction ->
+                                navigator.goToTransactionDetails(transaction)
                             }
-
                         )
                     }
                 }

@@ -8,6 +8,8 @@
     <!-- Screen Titles -->
     <string name="screen_title_transactions_history">Transactions History</string>
     <string name="screen_title_add_transaction">Add Transaction</string>
+    <string name="screen_title_settings">Settings</string>
+    <string name="screen_title_details">Transaction Details</string>
 
     <!-- Transaction Form Labels -->
     <string name="label_transaction_name">Name</string>
