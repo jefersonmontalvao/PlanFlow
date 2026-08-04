@@ -36,4 +36,17 @@
     <string name="cd_select_date">Select Date</string>
     <string name="cd_back">Back</string>
 
+    <!-- Settings Sections -->
+    <string name="settings_title_general">General</string>
+    <string name="settings_description_general">Language, currency, and general app behavior</string>
+
+    <!-- Setting Items -->
+    <string name="setting_item_name_theme">Theme</string>
+    <string name="setting_item_description_theme">App theme</string>
+    <string name="setting_theme_system">System</string>
+    <string name="setting_theme_dark">Dark</string>
+    <string name="setting_theme_light">Light</string>
+
+
+
 </resources>

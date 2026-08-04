@@ -1,6 +1,5 @@
 package com.example.planflow.ui.theme
 
-import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
@@ -10,6 +9,7 @@ import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
+import com.example.planflow.domain.models.Theme
 
 private val DarkColorScheme = darkColorScheme(
     primary = Purple80,
@@ -35,18 +35,24 @@ private val LightColorScheme = lightColorScheme(
 
 @Composable
 fun PlanFlowTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
+    theme: Theme = Theme.SYSTEM,
     // Dynamic color is available on Android 12+
     dynamicColor: Boolean = true,
     content: @Composable () -> Unit
 ) {
+    val darkTheme = when(theme) {
+        Theme.DARK -> true
+        Theme.LIGHT -> false
+        Theme.SYSTEM -> isSystemInDarkTheme()
+    }
+
     val colorScheme = when {
         dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
             val context = LocalContext.current
             if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
         }
 
-        darkTheme -> DarkColorScheme
+        darkTheme  -> DarkColorScheme
         else -> LightColorScheme
     }
 

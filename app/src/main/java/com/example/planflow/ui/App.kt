@@ -1,10 +1,10 @@
 package com.example.planflow.ui
 
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -12,20 +12,27 @@ import com.example.planflow.ui.navigation.AppNavigatorImpl
 import com.example.planflow.ui.navigation.Screen
 import com.example.planflow.ui.screens.AddTransactionScreen
 import com.example.planflow.ui.screens.DetailsScreen
+import com.example.planflow.ui.screens.settingsscreen.SettingsScreen
 import com.example.planflow.ui.screens.TransactionsHistoryScreen
 import com.example.planflow.ui.theme.PlanFlowTheme
+import com.example.planflow.ui.viewmodels.SettingsViewModel
 import com.example.planflow.ui.viewmodels.TransactionViewModel
 
 @Composable
 fun App() {
-    PlanFlowTheme {
+    val transactionViewModel: TransactionViewModel = hiltViewModel()
+    val settingsViewModel: SettingsViewModel = hiltViewModel()
+
+    val uiState by settingsViewModel.uiState.collectAsStateWithLifecycle()
+
+    PlanFlowTheme(
+        theme = uiState.theme
+    ) {
         val navController = rememberNavController()
 
         val navigator = remember {
             AppNavigatorImpl(navController)
         }
-
-        val transactionViewModel: TransactionViewModel = hiltViewModel()
 
         NavHost(
             navController = navController,
@@ -64,7 +71,10 @@ fun App() {
             composable(
                 route = Screen.Settings.route
             ) {
-                // TODO
+                SettingsScreen(
+                    viewModel = settingsViewModel,
+                    navigator = navigator
+                )
             }
         }
     }
