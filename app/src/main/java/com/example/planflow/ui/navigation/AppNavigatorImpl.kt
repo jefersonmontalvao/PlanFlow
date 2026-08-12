@@ -26,6 +26,10 @@ class AppNavigatorImpl(
         navController.navigate(Screen.Details.createRoute(transaction.id))
     }
 
+    override fun goToAbout() {
+        navController.navigate(Screen.About.route)
+    }
+
     override fun goBack() {
         navController.popBackStack()
     }

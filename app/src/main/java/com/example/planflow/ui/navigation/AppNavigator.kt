@@ -11,5 +11,7 @@ interface AppNavigator {
 
     fun goToTransactionDetails(transaction: Transaction)
 
+    fun goToAbout()
+
     fun goBack()
 }

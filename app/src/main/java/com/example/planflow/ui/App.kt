@@ -14,6 +14,7 @@ import com.example.planflow.ui.screens.AddTransactionScreen
 import com.example.planflow.ui.screens.DetailsScreen
 import com.example.planflow.ui.screens.settingsscreen.SettingsScreen
 import com.example.planflow.ui.screens.TransactionsHistoryScreen
+import com.example.planflow.ui.screens.settingsscreen.AboutScreen
 import com.example.planflow.ui.theme.PlanFlowTheme
 import com.example.planflow.ui.viewmodels.SettingsViewModel
 import com.example.planflow.ui.viewmodels.TransactionViewModel
@@ -73,6 +74,14 @@ fun App() {
             ) {
                 SettingsScreen(
                     viewModel = settingsViewModel,
+                    navigator = navigator
+                )
+            }
+
+            composable(
+                route = Screen.About.route
+            ) {
+                AboutScreen(
                     navigator = navigator
                 )
             }

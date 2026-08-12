@@ -58,6 +58,4 @@ class SettingsViewModel @Inject constructor(
 sealed interface SettingsEvent {
     data object OpenThemeBottomSheet : SettingsEvent
 
-    data object CloseBottomSheet : SettingsEvent
-
 }

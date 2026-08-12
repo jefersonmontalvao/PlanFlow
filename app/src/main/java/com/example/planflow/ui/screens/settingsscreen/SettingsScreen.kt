@@ -35,9 +35,11 @@ fun SettingsScreen(
     navigator: AppNavigator
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val bottomSheetState = rememberModalBottomSheetState()
 
     val settingsList: List<SettingItem> = listOf(
         SettingItem.Select(
+            id = SettingId.THEME,
             title = stringResource(R.string.setting_item_name_theme),
             description = stringResource(R.string.setting_item_description_theme),
             state = SelectState(
@@ -55,21 +57,18 @@ fun SettingsScreen(
                         label = Theme.LIGHT.toText()
                     )
                 ),
-                actualState = SelectableOption(
+                selectedItem = SelectableOption(
                     value = uiState.theme,
                     label = uiState.theme.toText()
                 )
             ),
-            events = SelectEvents(
-                onClick = { settingsItem ->
-                    viewModel.onThemeClicked(settingsItem)
-                },
-                onSelectOption = viewModel::updateTheme
-            )
+        ),
+        SettingItem.Action(
+            id = SettingId.ABOUT,
+            title = stringResource(R.string.setting_item_name_about),
+            description = stringResource(R.string.setting_item_description_about)
         ),
     )
-
-    val bottomSheetState = rememberModalBottomSheetState()
 
     Scaffold(
         topBar = {
@@ -82,7 +81,16 @@ fun SettingsScreen(
     ) { innerPadding ->
         LazyColumn(modifier = Modifier.padding(innerPadding)) {
             items(settingsList) { settingItem ->
-                SettingItemView(settingItem)
+                SettingItemView(
+                    settingItem = settingItem,
+                    onClick = { id ->
+                        when (id) {
+                            SettingId.THEME -> viewModel.onThemeClicked(settingItem)
+                            SettingId.ABOUT -> navigator.goToAbout()
+                            else -> {}
+                        }
+                    }
+                )
             }
         }
     }
@@ -92,17 +100,30 @@ fun SettingsScreen(
             sheetState = bottomSheetState,
             onDismissRequest = viewModel::closeBottomSheet
         ) {
-            SettingsBottomSheet(
-                settingItem = item,
-                onDismiss = viewModel::closeBottomSheet
-            )
+            when (item) {
+                is SettingItem.Select<*> -> {
+                    SelectSettingBottomSheet(
+                        settingItem = item,
+                        onSelect = when(item.id) {
+                            SettingId.THEME -> { value ->
+                                viewModel.updateTheme(value as Theme)
+                            }
+
+                            else -> null
+                        },
+                        onDismiss = viewModel::closeBottomSheet
+                    )
+                }
+
+                else -> {}
+            }
         }
     }
 }
 
 
 @Composable
-private fun SettingItemView(settingItem: SettingItem) {
+private fun SettingItemView(settingItem: SettingItem, onClick: (SettingId) -> Unit) {
     when(settingItem) {
         is SettingItem.Select<*> -> {
             ListItem(
@@ -111,10 +132,11 @@ private fun SettingItemView(settingItem: SettingItem) {
                 trailingContent = {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Text(
-                            text = settingItem.state.actualState.label,
+                            text = settingItem.state.selectedItem.label,
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.primary
                         )
+
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowForward,
                             contentDescription = null,
@@ -122,8 +144,30 @@ private fun SettingItemView(settingItem: SettingItem) {
                         )
                     }
                 },
-                modifier = Modifier.clickable { settingItem.events.onClick(settingItem) }
+                modifier = Modifier.clickable { onClick(settingItem.id) }
             )
         }
+
+        is SettingItem.Action -> {
+            ListItem(
+                headlineContent = { Text(text = settingItem.title) },
+                supportingContent = { Text(text = settingItem.description) },
+                trailingContent = {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.ArrowForward,
+                        contentDescription = null
+                    )
+                },
+                modifier = Modifier.clickable { onClick(settingItem.id) }
+            )
+        }
+
+        is SettingItem.Info -> {
+            ListItem(
+                headlineContent = { Text(text = settingItem.title) },
+                supportingContent = { Text(text = settingItem.description) },
+            )
+        }
+
     }
 }
