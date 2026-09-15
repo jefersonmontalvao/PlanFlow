@@ -1,5 +1,9 @@
 package com.example.planflow.ui.screens.settingsscreen
 
+import android.Manifest
+import android.os.Build
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
@@ -35,6 +39,11 @@ fun SettingsScreen(
     navigator: AppNavigator
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    val notificationPermissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission()
+    ) { }
+
     val bottomSheetState = rememberModalBottomSheetState()
 
     val settingsList: List<SettingItem> = listOf(
@@ -63,11 +72,35 @@ fun SettingsScreen(
                 )
             ),
         ),
+        SettingItem.Select(
+            id = SettingId.NOTIFICATIONS,
+            title = stringResource(R.string.setting_item_name_notifications),
+            description = stringResource(R.string.setting_item_description_notifications),
+            state = SelectState(
+                availableItems = listOf(
+                    SelectableOption(
+                        label = stringResource(R.string.setting_notifications_on),
+                        value = true
+                    ),
+                    SelectableOption(
+                        label = stringResource(R.string.setting_notifications_off),
+                        value = false
+                    ),
+                ),
+                selectedItem = SelectableOption(
+                    label = stringResource(
+                        if (uiState.notificationsEnabled) R.string.setting_notifications_on
+                        else R.string.setting_notifications_off
+                    ),
+                    value = uiState.notificationsEnabled
+                )
+            )
+        ),
         SettingItem.Action(
             id = SettingId.ABOUT,
             title = stringResource(R.string.setting_item_name_about),
             description = stringResource(R.string.setting_item_description_about)
-        ),
+        )
     )
 
     Scaffold(
@@ -87,6 +120,7 @@ fun SettingsScreen(
                         when (id) {
                             SettingId.THEME -> viewModel.onThemeClicked(settingItem)
                             SettingId.ABOUT -> navigator.goToAbout()
+                            SettingId.NOTIFICATIONS -> viewModel.onNotificationsClicked(settingItem)
                             else -> {}
                         }
                     }
@@ -107,6 +141,21 @@ fun SettingsScreen(
                         onSelect = when(item.id) {
                             SettingId.THEME -> { value ->
                                 viewModel.updateTheme(value as Theme)
+                            }
+                            SettingId.NOTIFICATIONS -> { value ->
+                                if (value != uiState.notificationsEnabled) {
+                                    viewModel.toggleNotifications()
+
+                                    if (
+                                        value == true
+                                        && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
+                                        ) {
+                                        notificationPermissionLauncher.launch(
+                                            Manifest.permission.POST_NOTIFICATIONS
+                                        )
+                                    }
+                                }
+
                             }
 
                             else -> null

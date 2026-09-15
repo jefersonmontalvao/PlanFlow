@@ -2,6 +2,7 @@ package com.example.planflow.data.repositories
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.example.planflow.domain.models.Theme
@@ -13,7 +14,8 @@ class SettingsRepository @Inject constructor(
     private val settingsDataStore: DataStore<Preferences>
 ) {
     private companion object {
-        val THEME_KEY = stringPreferencesKey("theme")
+        private val THEME_KEY = stringPreferencesKey("theme")
+        private val IS_NOTIFICATIONS_ENABLED_KEY = booleanPreferencesKey("is_notifications_enabled")
     }
 
     val themeFlow: Flow<Theme> =
@@ -22,6 +24,17 @@ class SettingsRepository @Inject constructor(
                 preferences[THEME_KEY] ?: Theme.SYSTEM.name
             )
         }
+
+    val isNotificationsEnabledFlow: Flow<Boolean> =
+        settingsDataStore.data.map { preferences ->
+            preferences[IS_NOTIFICATIONS_ENABLED_KEY] ?: false
+        }
+
+    suspend fun setNotificationsEnabled(enabled: Boolean) {
+        settingsDataStore.edit { preferences ->
+            preferences[IS_NOTIFICATIONS_ENABLED_KEY] = enabled
+        }
+    }
 
     suspend fun setTheme(theme: Theme) {
         settingsDataStore.edit { preferences ->
