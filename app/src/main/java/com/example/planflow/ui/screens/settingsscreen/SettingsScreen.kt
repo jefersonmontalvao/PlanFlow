@@ -20,9 +20,14 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -40,11 +45,31 @@ fun SettingsScreen(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
+    val context = LocalContext.current
+
+    var csvToExport by remember {
+        mutableStateOf<String?>(null)
+    }
+
+    val createCsvDocumentLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.CreateDocument("text/csv")
+    ) { uri ->
+
+        if (uri != null && csvToExport != null) {
+            context.contentResolver
+                .openOutputStream(uri)?.use { outputStream ->
+                    outputStream.write(csvToExport!!.toByteArray(Charsets.UTF_8))
+                }
+        }
+
+        csvToExport = null
+    }
+
     val notificationPermissionLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission()
     ) { }
 
-    val bottomSheetState = rememberModalBottomSheetState()
+    val bottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
     val settingsList: List<SettingItem> = listOf(
         SettingItem.Select(
@@ -96,12 +121,24 @@ fun SettingsScreen(
                 )
             )
         ),
+        SettingItem.CustomAction(
+            id = SettingId.EXPORT_DATA,
+            title = stringResource(R.string.setting_item_name_export),
+            description = stringResource(R.string.setting_item_description_export)
+        ),
         SettingItem.Action(
             id = SettingId.ABOUT,
             title = stringResource(R.string.setting_item_name_about),
             description = stringResource(R.string.setting_item_description_about)
         )
     )
+
+    LaunchedEffect(Unit) {
+        viewModel.exportCsvEvent.collect{ csv ->
+            csvToExport = csv
+            createCsvDocumentLauncher.launch("planflow_export.csv")
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -121,6 +158,7 @@ fun SettingsScreen(
                             SettingId.THEME -> viewModel.onThemeClicked(settingItem)
                             SettingId.ABOUT -> navigator.goToAbout()
                             SettingId.NOTIFICATIONS -> viewModel.onNotificationsClicked(settingItem)
+                            SettingId.EXPORT_DATA -> viewModel.onExportClicked(settingItem)
                             else -> {}
                         }
                     }
@@ -155,19 +193,26 @@ fun SettingsScreen(
                                         )
                                     }
                                 }
-
                             }
-
                             else -> null
                         },
                         onDismiss = viewModel::closeBottomSheet
                     )
                 }
-
+                is SettingItem.CustomAction -> {
+                    ExportActionSettingBottomSheet(
+                        settingItem = item,
+                        exportAction = { exportPeriod ->
+                            viewModel.exportDataAsCsv(exportPeriod)
+                        },
+                        onDismiss = viewModel::closeBottomSheet
+                    )
+                }
                 else -> {}
             }
         }
     }
+
 }
 
 
@@ -192,6 +237,20 @@ private fun SettingItemView(settingItem: SettingItem, onClick: (SettingId) -> Un
                             modifier = Modifier.padding(start = 8.dp)
                         )
                     }
+                },
+                modifier = Modifier.clickable { onClick(settingItem.id) }
+            )
+        }
+
+        is SettingItem.CustomAction -> {
+            ListItem(
+                headlineContent = { Text(text = settingItem.title) },
+                supportingContent = { Text(text = settingItem.description) },
+                trailingContent = {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.ArrowForward,
+                        contentDescription = null
+                    )
                 },
                 modifier = Modifier.clickable { onClick(settingItem.id) }
             )

@@ -24,6 +24,11 @@ sealed interface SettingItem {
         override val description: String,
     ) : SettingItem
 
+    data class CustomAction(
+        override val id: SettingId,
+        override val title: String,
+        override val description: String,
+    ) : SettingItem
 }
 
 data class SelectState<T>(

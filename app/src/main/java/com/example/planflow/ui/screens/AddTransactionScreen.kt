@@ -45,6 +45,7 @@ import com.example.planflow.R
 import com.example.planflow.domain.models.Transaction
 import com.example.planflow.domain.models.TransactionType
 import com.example.planflow.ui.components.bottombar.BottomBar
+import com.example.planflow.ui.components.form.DatePickerDocked
 import com.example.planflow.ui.components.topbar.TopBar
 import com.example.planflow.ui.navigation.AppNavigator
 import com.example.planflow.ui.viewmodels.TransactionViewModel
@@ -157,12 +158,12 @@ fun AddTransactionScreen(
                     modifier = Modifier.fillMaxWidth()
                 )
 
-                DatePickerDocked(
-                    defaultDate = transactionDate,
-                    changeSelectedDate = { selectedDate ->
-                        transactionDate = selectedDate
-                    }
-                )
+            DatePickerDocked (
+                defaultDate = transactionDate,
+                changeSelectedDate = { selectedDate ->
+                    transactionDate = selectedDate
+                }
+            )
 
             // Details field
             OutlinedTextField(
@@ -193,67 +194,6 @@ fun AddTransactionScreen(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun DatePickerDocked(
-    defaultDate: LocalDate,
-    changeSelectedDate: (date: LocalDate) -> Unit
-) {
-    var showDatePicker by remember { mutableStateOf(false) }
-    val datePickerState = rememberDatePickerState()
-    val selectedDateFieldValue = datePickerState.selectedDateMillis?.toLocalDate()?.formatAsShortDate() ?: defaultDate.formatAsShortDate()
-
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-    ) {
-        OutlinedTextField(
-            value = selectedDateFieldValue,
-            onValueChange = { },
-            label = { Text(stringResource(R.string.label_transaction_date)) },
-            readOnly = true,
-            shape = RoundedCornerShape(5.dp),
-            trailingIcon = {
-                IconButton(onClick = { showDatePicker = true }) {
-                    Icon(
-                        imageVector = Icons.Default.DateRange,
-                        contentDescription = stringResource(R.string.cd_select_date)
-                    )
-                }
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-        )
-
-        if (showDatePicker) {
-            DatePickerDialog(
-                onDismissRequest = { showDatePicker = false },
-                confirmButton = {
-                    TextButton(
-                        onClick = {
-                            datePickerState.selectedDateMillis?.let {
-                                changeSelectedDate(it.toLocalDate())
-                            }
-                            showDatePicker = false
-                        }
-                    ) {
-                        Text(stringResource(R.string.action_ok))
-                    }
-                },
-                dismissButton = {
-                    TextButton(onClick = { showDatePicker = false }) {
-                        Text(stringResource(R.string.action_cancel))
-                    }
-                }
-            ) {
-                DatePicker(
-                    state = datePickerState,
-                    showModeToggle = true
-                )
-            }
-        }
-    }
-}
 
 @Composable
 private fun TransactionTypeSegmentedMenu(modifier: Modifier, onTypeSelected: (type: TransactionType) -> Unit) {

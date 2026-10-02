@@ -41,21 +41,21 @@
     <string name="settings_description_general">Language, currency, and general app behavior</string>
 
     <!-- Setting Items -->
-    <string name="setting_item_name_theme">Theme</string>
-    <string name="setting_item_description_theme">App theme</string>
-    <string name="setting_theme_system">System</string>
-    <string name="setting_theme_dark">Dark</string>
-    <string name="setting_theme_light">Light</string>
+    <string name="setting_item_name_theme">App Theme</string>
+    <string name="setting_item_description_theme">Choose between light, dark, or system default theme</string>
+    <string name="setting_theme_system">System Default</string>
+    <string name="setting_theme_dark">Dark Mode</string>
+    <string name="setting_theme_light">Light Mode</string>
 
-    <string name="setting_item_name_notifications">Notifications</string>
-    <string name="setting_item_description_notifications">App notifications</string>
-    <string name="setting_notifications_on">On</string>
-    <string name="setting_notifications_off">Off</string>
+    <string name="setting_item_name_notifications">Reminders &amp; Notifications</string>
+    <string name="setting_item_description_notifications">Manage daily reminders to record your transactions</string>
+    <string name="setting_notifications_on">Enabled</string>
+    <string name="setting_notifications_off">Disabled</string>
 
-    <string name="setting_item_name_about">About</string>
-    <string name="setting_item_description_about">App version and developer information</string>
+    <string name="setting_item_name_about">About PlanFlow</string>
+    <string name="setting_item_description_about">View app version, developer, and legal information</string>
 
-    <string name="setting_item_version">Version</string>
+    <string name="setting_item_version">App Version</string>
     <string name="about_app_description">PlanFlow is your personal finance manager designed to help you track your expenses and incomes easily.</string>
     <string name="about_developer_label">Developer</string>
     <string name="about_developer_name">Jeferson Montalvão</string>
@@ -64,9 +64,20 @@
     <string name="about_terms_service">Terms of Service</string>
 
     <!-- Notification Channels -->
-    <string name="notification_channel_reminders_name">Reminders</string>
-    <string name="notification_expense_reminder_title">Expense Reminder</string>
-    <string name="notification_expense_reminder_content">Don\'t forget to record your expenses today.</string>
+    <string name="notification_channel_reminders_name">Daily Reminders</string>
+    <string name="notification_expense_reminder_title">Daily Expense Reminder</string>
+    <string name="notification_expense_reminder_content">Don\'t forget to log your transactions and keep your finances up to date!</string>
+
+    <!-- Export Data BottomSheet -->
+    <string name="export_data_title">Export Financial Data</string>
+    <string name="export_data_period">Select Period</string>
+    <string name="export_data_all_period">All Time</string>
+    <string name="export_data_custom_period">Custom Range</string>
+    <string name="export_data_button">Export Data</string>
+
+    <!-- Settings Export Row -->
+    <string name="setting_item_name_export">Export Financial Data</string>
+    <string name="setting_item_description_export">Export your transactions history into a CSV file</string>
 
 
 
