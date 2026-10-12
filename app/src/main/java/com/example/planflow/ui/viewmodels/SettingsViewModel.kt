@@ -1,17 +1,11 @@
 package com.example.planflow.ui.viewmodels
 
-import android.content.Intent
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.app.ActivityCompat.startActivityForResult
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.planflow.data.export.TransactionCsvExporter
 import com.example.planflow.data.repositories.SettingsRepository
-import com.example.planflow.domain.models.Theme
-import com.example.planflow.domain.models.Transaction
 import com.example.planflow.domain.repositories.TransactionRepository
-import com.example.planflow.notification.PlanFlowNotificationManager
+import com.example.planflow.domain.models.Theme
 import com.example.planflow.ui.screens.settingsscreen.SettingItem
 import com.example.planflow.ui.screens.settingsscreen.SettingsUiState
 import com.example.planflow.ui.screens.settingsscreen.export.ExportPeriod

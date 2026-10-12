@@ -12,6 +12,7 @@ import com.example.planflow.ui.navigation.AppNavigatorImpl
 import com.example.planflow.ui.navigation.Screen
 import com.example.planflow.ui.screens.AddTransactionScreen
 import com.example.planflow.ui.screens.DetailsScreen
+import com.example.planflow.ui.screens.EditTransactionScreen
 import com.example.planflow.ui.screens.settingsscreen.SettingsScreen
 import com.example.planflow.ui.screens.TransactionsHistoryScreen
 import com.example.planflow.ui.screens.settingsscreen.AboutScreen
@@ -51,9 +52,21 @@ fun App() {
             composable(
                 route = Screen.Details.route
             ) { backStackEntry ->
-                val transactionId = backStackEntry.arguments?.getString("transactionId")
+                val transactionId = backStackEntry.arguments?.getString(Screen.TRANSACTION_ID_ARGUMENT)
 
                 DetailsScreen(
+                    viewModel = transactionViewModel,
+                    navigator = navigator,
+                    transactionId = transactionId
+                )
+            }
+
+            composable(
+                route = Screen.TransactionEditor.route
+            ) { backStackEntry ->
+                val transactionId = backStackEntry.arguments?.getString(Screen.TRANSACTION_ID_ARGUMENT)
+
+                EditTransactionScreen(
                     viewModel = transactionViewModel,
                     navigator = navigator,
                     transactionId = transactionId

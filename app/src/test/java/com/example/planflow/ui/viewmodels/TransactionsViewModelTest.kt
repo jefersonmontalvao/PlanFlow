@@ -1,23 +1,16 @@
 package com.example.planflow.ui.viewmodels
 
-import androidx.compose.runtime.collectAsState
 import com.example.planflow.MainDispatcherRule
 import com.example.planflow.domain.models.Transaction
 import com.example.planflow.domain.models.TransactionType
 import com.example.planflow.domain.repositories.TransactionRepository
 import junit.framework.TestCase.assertTrue
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.any
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.processNextEventInCurrentThread
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Before

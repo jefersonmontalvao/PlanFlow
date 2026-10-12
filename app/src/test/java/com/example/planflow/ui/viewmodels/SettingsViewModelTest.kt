@@ -31,6 +31,7 @@ class SettingsViewModelTest {
     private lateinit var settingsDataStore: DataStore<Preferences>
     private lateinit var testFile: File
     private lateinit var settingsRepository: SettingsRepository
+    private lateinit var transactionRepository: FakeTransactionsRepository
     private lateinit var settingsViewModel: SettingsViewModel
 
     @Before
@@ -47,7 +48,11 @@ class SettingsViewModelTest {
         }
 
         settingsRepository = SettingsRepository(settingsDataStore)
-        settingsViewModel = SettingsViewModel(settingsRepository)
+        transactionRepository = FakeTransactionsRepository()
+        settingsViewModel = SettingsViewModel(
+            settingsRepository,
+            transactionsRepository = transactionRepository
+        )
     }
 
     @After

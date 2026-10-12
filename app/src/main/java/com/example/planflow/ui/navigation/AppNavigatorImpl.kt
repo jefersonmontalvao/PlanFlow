@@ -26,6 +26,10 @@ class AppNavigatorImpl(
         navController.navigate(Screen.Details.createRoute(transaction.id))
     }
 
+    override fun goToTransactionEditor(transaction: Transaction) {
+        navController.navigate(Screen.TransactionEditor.createRoute(transaction.id))
+    }
+
     override fun goToAbout() {
         navController.navigate(Screen.About.route)
     }

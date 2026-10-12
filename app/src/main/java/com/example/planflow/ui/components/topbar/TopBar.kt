@@ -14,7 +14,7 @@ import com.example.planflow.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopBar(text: String, showBackIcon: Boolean = false, onBackClick: (() -> Unit) = {}) {
+fun TopBar(text: String, showBackIcon: Boolean = false, onBackClick: (() -> Unit) = {}, rightSideIcon: (@Composable () -> Unit)? = null) {
     CenterAlignedTopAppBar(
         title = {
                 Text(
@@ -33,6 +33,9 @@ fun TopBar(text: String, showBackIcon: Boolean = false, onBackClick: (() -> Unit
                     )
                 }
             }
+        },
+        actions = {
+            rightSideIcon?.invoke()
         }
     )
 
